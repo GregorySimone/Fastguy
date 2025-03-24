@@ -33,6 +33,23 @@ function toggleView(view) {
     }
 }
 
+// Update UI based on session type
+function updateUIForSessionType(isQualifying) {
+    const qualifyingSegmentDiv = document.querySelector('.qualifying-segment-div');
+    const lapRangeDiv = document.querySelector('.lap-range-div');
+
+    if (isQualifying) {
+        // For qualifying sessions, always show segment selector and hide lap range
+        qualifyingSegmentDiv.style.display = 'block';
+        lapRangeDiv.style.display = 'none';
+    } else {
+        qualifyingSegmentDiv.style.display = 'none';
+        // Only show lap range if not fastest lap analysis
+        const analysisType = document.getElementById('analysisType').value;
+        lapRangeDiv.style.display = analysisType === 'fastestLap' ? 'none' : 'block';
+    }
+}
+
 // Initialize dropdowns and event listeners
 document.addEventListener('DOMContentLoaded', async () => {
     // Populate year dropdown (2023-2025)
@@ -123,8 +140,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         const sessionKey = e.target.value;
         const driver1Select = document.getElementById('driver1');
         const driver2Select = document.getElementById('driver2');
-        const qualifyingSegmentDiv = document.querySelector('.qualifying-segment-div');
-        const lapRangeDiv = document.querySelector('.lap-range-div');
 
         // Reset driver dropdowns
         driver1Select.innerHTML = '<option value="">Select Driver 1</option>';
@@ -156,42 +171,20 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.log('Session Data:', sessionData);
             
             const isQualifying = sessionData[0] && sessionData[0].session_name.toLowerCase().includes('qualifying');
-            
-            // For qualifying sessions, always show segment selector and hide lap range
-            if (isQualifying) {
-                qualifyingSegmentDiv.style.display = 'block';
-                lapRangeDiv.style.display = 'none';
-            } else {
-                qualifyingSegmentDiv.style.display = 'none';
-                // Only show lap range if not fastest lap analysis
-                const analysisType = document.getElementById('analysisType').value;
-                lapRangeDiv.style.display = analysisType === 'fastestLap' ? 'none' : 'block';
-            }
+            updateUIForSessionType(isQualifying);
         } else {
             // Disable driver dropdowns
             driver1Select.disabled = true;
             driver2Select.disabled = true;
-            qualifyingSegmentDiv.style.display = 'none';
-            lapRangeDiv.style.display = 'block';
+            updateUIForSessionType(false);
         }
     });
 
     // Analysis type change handler
     document.getElementById('analysisType').addEventListener('change', (e) => {
-        const analysisType = e.target.value;
-        const qualifyingSegmentDiv = document.querySelector('.qualifying-segment-div');
-        const lapRangeDiv = document.querySelector('.lap-range-div');
         const sessionType = document.getElementById('session').options[document.getElementById('session').selectedIndex]?.text.toLowerCase() || '';
-
-        // For qualifying sessions, always show segment selector and hide lap range
-        if (sessionType.includes('qualifying')) {
-            qualifyingSegmentDiv.style.display = 'block';
-            lapRangeDiv.style.display = 'none';
-        } else {
-            qualifyingSegmentDiv.style.display = 'none';
-            // Only show lap range if not fastest lap analysis
-            lapRangeDiv.style.display = analysisType === 'fastestLap' ? 'none' : 'block';
-        }
+        const isQualifying = sessionType.includes('qualifying');
+        updateUIForSessionType(isQualifying);
     });
 
     // View toggle handlers
