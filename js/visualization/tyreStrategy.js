@@ -1,5 +1,5 @@
 // Visualize tyre strategy
-async function visualizeTyreStrategy(data) {
+export async function visualizeTyreStrategy(data) {
     const ctx = document.getElementById('analysisChart').getContext('2d');
     
     // Get selected values and driver information

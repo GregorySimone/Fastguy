@@ -1,5 +1,5 @@
 // Visualize fastest lap comparison
-async function visualizeFastestLap() {
+export async function visualizeFastestLap() {
     const ctx = document.getElementById('analysisChart').getContext('2d');
     
     // Get selected values
