@@ -1,142 +1,27 @@
-# F1 Data Analysis Tool
+# Fastguy
 
-A web-based tool for analyzing Formula 1 race data using the OpenF1 API. This tool provides various visualizations and comparisons of driver performance data.
+A web application for analyzing and comparing Formula 1 driver performance using the OpenF1 API.
 
 ## Features
 
-### 1. Fastest Lap Analysis
-- Compare fastest lap times between two drivers
-- Sector-by-sector breakdown
-- Visual bar chart comparison
-- Detailed time deltas
-
-### 2. Lap Times Analysis
-- Full session lap time comparison
-- Line chart showing lap time evolution
-- Personal best laps highlighted
-- Lap-by-lap delta times
-
-### 3. Sectors Analysis
-- Best and average sector times
-- Theoretical best lap calculation
-- Sector-by-sector comparison
-- Performance trends analysis
-
-### 4. Mini-sectors Analysis
-- Detailed track segment comparison
-- Color-coded performance indicators:
-  * Purple: Fastest overall
-  * Green: Personal best
-  * Yellow: Standard
-- Sector-by-sector breakdown
-
-### 5. Speed Traps Analysis
-- Speed comparison at three points:
-  * First intermediate (I1)
-  * Second intermediate (I2)
-  * Speed trap (ST)
-- Maximum and average speeds
-- Speed differentials
-
-### 6. Tyre Strategy Analysis
-- Full race tyre compound visualization
-- Stint length comparison
-- Tyre age tracking
-- Strategy differences
-
-## Getting Started
-
-### Prerequisites
-- Node.js (v14 or higher)
-- npm (v6 or higher)
-
-### Installation
-1. Clone the repository
-```bash
-git clone [repository-url]
-cd [repository-name]
-```
-
-2. Install dependencies
-```bash
-npm install
-```
-
-3. Start the proxy server
-```bash
-node proxy.js
-```
-
-4. Open `index.html` in your browser or serve it using a local server
+- Compare fastest laps between two drivers
+- Analyze lap time progression
+- Compare sector times
+- View mini-sector performance
+- Compare speed trap data
+- Analyze tyre strategies
 
 ## Usage
 
-1. Select a year from the dropdown
-2. Choose a Grand Prix
-3. Select a session (Practice, Qualifying, Race)
-4. Choose two drivers to compare
-5. Select an analysis type:
-   - Fastest Lap
-   - Lap Times
-   - Sectors
-   - Mini-sectors
-   - Speed Traps
-   - Tyre Strategy
-6. Toggle between chart and table views for detailed information
+1. Select a year, grand prix, and session
+2. Choose two drivers to compare
+3. Select the type of analysis you want to perform
+4. View the results in either chart or table format
 
-## Data Visualization
+## Data Source
 
-### Chart Types
-- Bar charts for comparing discrete values (sectors, speed traps)
-- Line charts for temporal data (lap times)
-- Custom visualizations for tyre strategy and mini-sectors
-
-### Table Views
-- Detailed numerical data
-- Color-coded performance indicators
-- Delta time calculations
-- Comprehensive statistics
-
-## API Integration
-
-This tool uses the OpenF1 API to fetch real-time and historical Formula 1 data. The proxy server handles API requests to avoid CORS issues.
-
-### Endpoints Used
-- `/v1/meetings` - Race weekend information
-- `/v1/sessions` - Session details
-- `/v1/drivers` - Driver information
-- `/v1/laps` - Lap timing data
-- `/v1/stints` - Tyre strategy information
-
-## Code Structure
-
-- `index.html` - Main application interface
-- `styles.css` - CSS styling
-- `script.js` - Core application logic
-- `proxy.js` - API proxy server
-
-### Key Functions
-- `visualizeFastestLap()` - Fastest lap comparison
-- `visualizeLapTimes()` - Full session lap time analysis
-- `visualizeSectors()` - Sector time comparison
-- `visualizeMinisectors()` - Mini-sector analysis
-- `visualizeSpeedTraps()` - Speed trap comparison
-- `visualizeTyreStrategy()` - Tyre strategy visualization
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
+This application uses the [OpenF1 API](https://openf1.org/) to fetch Formula 1 data.
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Acknowledgments
-
-- OpenF1 API for providing the data
-- Chart.js for visualization capabilities
-- Bootstrap for UI components
+MIT
