@@ -295,7 +295,7 @@ async function visualizeFastestLap() {
         driver2FastestLap.lap_duration
     ] : [null, null, null, null];
 
-    // Create chart
+// Create chart
     currentChart = new Chart(ctx, {
         type: 'bar',
         data: {
@@ -304,41 +304,92 @@ async function visualizeFastestLap() {
                 {
                     label: driver1Code,
                     data: driver1Data,
-                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
-                    borderColor: 'rgb(255, 99, 132)',
-                    borderWidth: 1,
-                    barPercentage: 0.8
+                    backgroundColor: 'rgba(255, 45, 85, 0.7)',
+                    borderColor: 'rgb(255, 45, 85)',
+                    borderWidth: 2,
+                    barPercentage: 0.8,
+                    borderRadius: 4
                 },
                 {
                     label: driver2Code,
                     data: driver2Data,
-                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
-                    borderColor: 'rgb(54, 162, 235)',
-                    borderWidth: 1,
-                    barPercentage: 0.8
+                    backgroundColor: 'rgba(0, 122, 255, 0.7)',
+                    borderColor: 'rgb(0, 122, 255)',
+                    borderWidth: 2,
+                    barPercentage: 0.8,
+                    borderRadius: 4
                 }
             ]
         },
-        options: {
-            responsive: true,
-            plugins: {
-                title: {
-                    display: true,
-                    text: `Fastest Lap Comparison${segment ? ` - ${segment}` : ''}`
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
+            options: {
+                responsive: true,
+                plugins: {
                     title: {
                         display: true,
-                        text: 'Time (seconds)'
+                        text: `Fastest Lap Comparison${segment ? ` - ${segment}` : ''}`,
+                        font: {
+                            size: 16,
+                            weight: 'bold'
+                        },
+                        padding: 20
                     },
-                    min: Math.min(...driver1Data.filter(Boolean), ...driver2Data.filter(Boolean)) * 0.99,
-                    max: Math.max(...driver1Data.filter(Boolean), ...driver2Data.filter(Boolean)) * 1.01
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            usePointStyle: true,
+                            padding: 20,
+                            font: {
+                                size: 12
+                            }
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        titleFont: {
+                            size: 14
+                        },
+                        bodyFont: {
+                            size: 13
+                        },
+                        padding: 12,
+                        cornerRadius: 8
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Time (seconds)',
+                            font: {
+                                size: 12,
+                                weight: 'bold'
+                            },
+                            padding: 10
+                        },
+                        min: Math.min(...driver1Data.filter(Boolean), ...driver2Data.filter(Boolean)) * 0.99,
+                        max: Math.max(...driver1Data.filter(Boolean), ...driver2Data.filter(Boolean)) * 1.01,
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        },
+                        ticks: {
+                            font: {
+                                size: 11
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            font: {
+                                size: 11
+                            }
+                        }
+                    }
                 }
             }
-        }
     });
 
     // Update table view
@@ -365,12 +416,12 @@ async function visualizeFastestLap() {
         const driver2Time = driver2Data[index];
         const delta = driver1Time && driver2Time ? (driver1Time - driver2Time).toFixed(3) : 'N/A';
         
-        row.innerHTML = `
-            <td>${sector}</td>
-            <td>${formatTime(driver1Time)}</td>
-            <td>${formatTime(driver2Time)}</td>
-            <td>${delta !== 'N/A' ? (delta > 0 ? '+' : '') + delta : 'N/A'}</td>
-        `;
+            row.innerHTML = `
+                <td>${sector}</td>
+                <td class="fw-semibold">${formatTime(driver1Time)}</td>
+                <td class="fw-semibold">${formatTime(driver2Time)}</td>
+                <td class="${delta > 0 ? 'delta-positive' : 'delta-negative'}">${delta !== 'N/A' ? (delta > 0 ? '+' : '') + delta : 'N/A'}</td>
+            `;
         tbody.appendChild(row);
     });
 }
@@ -435,8 +486,13 @@ async function visualizeTyreStrategy(data) {
                         const stint = driver1Stints.find(s => lap + 1 >= s.lap_start && lap + 1 <= s.lap_end);
                         return stint ? tyreColors[stint.compound] : 'rgba(0,0,0,0)';
                     }),
-                    barPercentage: 0.5,
-                    categoryPercentage: 1
+                    borderWidth: 1,
+                    borderColor: Array.from({length: maxLap}, (_, lap) => {
+                        const stint = driver1Stints.find(s => lap + 1 >= s.lap_start && lap + 1 <= s.lap_end);
+                        return stint ? 'rgba(0, 0, 0, 0.1)' : 'rgba(0,0,0,0)';
+                    }),
+                    barPercentage: 0.98,
+                    categoryPercentage: 0.98
                 },
                 {
                     label: `${driver2Code} Tyres`,
@@ -448,8 +504,13 @@ async function visualizeTyreStrategy(data) {
                         const stint = driver2Stints.find(s => lap + 1 >= s.lap_start && lap + 1 <= s.lap_end);
                         return stint ? tyreColors[stint.compound] : 'rgba(0,0,0,0)';
                     }),
-                    barPercentage: 0.5,
-                    categoryPercentage: 1
+                    borderWidth: 1,
+                    borderColor: Array.from({length: maxLap}, (_, lap) => {
+                        const stint = driver2Stints.find(s => lap + 1 >= s.lap_start && lap + 1 <= s.lap_end);
+                        return stint ? 'rgba(0, 0, 0, 0.1)' : 'rgba(0,0,0,0)';
+                    }),
+                    barPercentage: 0.98,
+                    categoryPercentage: 0.98
                 }
             ]
         },
@@ -458,12 +519,62 @@ async function visualizeTyreStrategy(data) {
             plugins: {
                 title: {
                     display: true,
-                    text: 'Tyre Strategy Comparison'
+                    text: 'Tyre Strategy Comparison',
+                    font: {
+                        size: 16,
+                        weight: 'bold'
+                    },
+                    padding: 20
+                },
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        usePointStyle: true,
+                        padding: 20,
+                        font: {
+                            size: 12
+                        }
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    titleFont: {
+                        size: 14
+                    },
+                    bodyFont: {
+                        size: 13
+                    },
+                    padding: 12,
+                    cornerRadius: 8,
+                    callbacks: {
+                        label: function(context) {
+                            const stint = context.datasetIndex === 0 ? 
+                                driver1Stints.find(s => context.dataIndex + 1 >= s.lap_start && context.dataIndex + 1 <= s.lap_end) :
+                                driver2Stints.find(s => context.dataIndex + 1 >= s.lap_start && context.dataIndex + 1 <= s.lap_end);
+                            if (stint) {
+                                return `${context.dataset.label}: ${stint.compound} (Age: ${stint.tyre_age_at_start} laps)`;
+                            }
+                            return context.dataset.label;
+                        }
+                    }
                 }
             },
             scales: {
                 y: {
                     display: false
+                },
+                x: {
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        font: {
+                            size: 11
+                        },
+                        maxRotation: 0,
+                        autoSkip: true,
+                        maxTicksLimit: 20
+                    }
                 }
             }
         }
@@ -500,23 +611,25 @@ async function visualizeTyreStrategy(data) {
     // Add stint information
     driver1Stints.forEach((stint, index) => {
         const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>Stint ${stint.stint_number}</td>
-            <td>
-                Compound: ${stint.compound}<br>
-                Laps: ${stint.lap_start}-${stint.lap_end}<br>
-                Age: ${stint.tyre_age_at_start} laps
-            </td>
-            <td>
-                ${driver2Stints[index] ? `
-                    Compound: ${driver2Stints[index].compound}<br>
-                    Laps: ${driver2Stints[index].lap_start}-${driver2Stints[index].lap_end}<br>
-                    Age: ${driver2Stints[index].tyre_age_at_start} laps
-                ` : 'N/A'}
-            </td>
-            <td>${driver2Stints[index] ? 
-                stint.compound === driver2Stints[index].compound ? 'Same compound' : 'Different compound' 
-                : 'N/A'}</td>
+            row.innerHTML = `
+                <td class="fw-semibold">Stint ${stint.stint_number}</td>
+                <td>
+                    <span class="tyre-compound tyre-${stint.compound.toLowerCase()}">${stint.compound}</span><br>
+                    <small class="text-muted">Laps: ${stint.lap_start}-${stint.lap_end}</small><br>
+                    <small class="text-muted">Age: ${stint.tyre_age_at_start} laps</small>
+                </td>
+                <td>
+                    ${driver2Stints[index] ? `
+                        <span class="tyre-compound tyre-${driver2Stints[index].compound.toLowerCase()}">${driver2Stints[index].compound}</span><br>
+                        <small class="text-muted">Laps: ${driver2Stints[index].lap_start}-${driver2Stints[index].lap_end}</small><br>
+                        <small class="text-muted">Age: ${driver2Stints[index].tyre_age_at_start} laps</small>
+                    ` : '<span class="text-muted">N/A</span>'}
+                </td>
+                <td>${driver2Stints[index] ? 
+                    stint.compound === driver2Stints[index].compound ? 
+                        '<span class="badge bg-success">Same compound</span>' : 
+                        '<span class="badge bg-warning text-dark">Different compound</span>' 
+                    : '<span class="text-muted">N/A</span>'}</td>
         `;
         tbody.appendChild(row);
     });
@@ -592,16 +705,22 @@ async function visualizeLapTimes() {
                 {
                     label: driver1Code,
                     data: driver1Data,
-                    borderColor: 'rgb(255, 99, 132)',
-                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
-                    tension: 0.1
+                    borderColor: 'rgb(255, 45, 85)',
+                    backgroundColor: 'rgba(255, 45, 85, 0.1)',
+                    borderWidth: 2,
+                    tension: 0.3,
+                    pointRadius: 3,
+                    pointHoverRadius: 5
                 },
                 {
                     label: driver2Code,
                     data: driver2Data,
-                    borderColor: 'rgb(54, 162, 235)',
-                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
-                    tension: 0.1
+                    borderColor: 'rgb(0, 122, 255)',
+                    backgroundColor: 'rgba(0, 122, 255, 0.1)',
+                    borderWidth: 2,
+                    tension: 0.3,
+                    pointRadius: 3,
+                    pointHoverRadius: 5
                 }
             ]
         },
@@ -610,7 +729,33 @@ async function visualizeLapTimes() {
             plugins: {
                 title: {
                     display: true,
-                    text: 'Lap Times Comparison'
+                    text: 'Lap Times Comparison',
+                    font: {
+                        size: 16,
+                        weight: 'bold'
+                    },
+                    padding: 20
+                },
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        usePointStyle: true,
+                        padding: 20,
+                        font: {
+                            size: 12
+                        }
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    titleFont: {
+                        size: 14
+                    },
+                    bodyFont: {
+                        size: 13
+                    },
+                    padding: 12,
+                    cornerRadius: 8
                 }
             },
             scales: {
@@ -618,7 +763,30 @@ async function visualizeLapTimes() {
                     beginAtZero: false,
                     title: {
                         display: true,
-                        text: 'Time (seconds)'
+                        text: 'Time (seconds)',
+                        font: {
+                            size: 12,
+                            weight: 'bold'
+                        },
+                        padding: 10
+                    },
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    },
+                    ticks: {
+                        font: {
+                            size: 11
+                        }
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        font: {
+                            size: 11
+                        }
                     }
                 }
             }
@@ -751,33 +919,37 @@ async function visualizeSectors() {
                 {
                     label: `${driver1Code} Best`,
                     data: driver1BestData,
-                    backgroundColor: 'rgba(255, 99, 132, 0.8)',
-                    borderColor: 'rgb(255, 99, 132)',
-                    borderWidth: 1,
+                    backgroundColor: 'rgba(255, 45, 85, 0.8)',
+                    borderColor: 'rgb(255, 45, 85)',
+                    borderWidth: 2,
+                    borderRadius: 4,
                     barPercentage: 0.8
                 },
                 {
                     label: `${driver1Code} Avg`,
                     data: driver1AvgData,
-                    backgroundColor: 'rgba(255, 99, 132, 0.3)',
-                    borderColor: 'rgb(255, 99, 132)',
-                    borderWidth: 1,
+                    backgroundColor: 'rgba(255, 45, 85, 0.3)',
+                    borderColor: 'rgb(255, 45, 85)',
+                    borderWidth: 2,
+                    borderRadius: 4,
                     barPercentage: 0.8
                 },
                 {
                     label: `${driver2Code} Best`,
                     data: driver2BestData,
-                    backgroundColor: 'rgba(54, 162, 235, 0.8)',
-                    borderColor: 'rgb(54, 162, 235)',
-                    borderWidth: 1,
+                    backgroundColor: 'rgba(0, 122, 255, 0.8)',
+                    borderColor: 'rgb(0, 122, 255)',
+                    borderWidth: 2,
+                    borderRadius: 4,
                     barPercentage: 0.8
                 },
                 {
                     label: `${driver2Code} Avg`,
                     data: driver2AvgData,
-                    backgroundColor: 'rgba(54, 162, 235, 0.3)',
-                    borderColor: 'rgb(54, 162, 235)',
-                    borderWidth: 1,
+                    backgroundColor: 'rgba(0, 122, 255, 0.3)',
+                    borderColor: 'rgb(0, 122, 255)',
+                    borderWidth: 2,
+                    borderRadius: 4,
                     barPercentage: 0.8
                 }
             ]
@@ -787,7 +959,33 @@ async function visualizeSectors() {
             plugins: {
                 title: {
                     display: true,
-                    text: 'Sector Times Comparison'
+                    text: 'Sector Times Comparison',
+                    font: {
+                        size: 16,
+                        weight: 'bold'
+                    },
+                    padding: 20
+                },
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        usePointStyle: true,
+                        padding: 20,
+                        font: {
+                            size: 12
+                        }
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    titleFont: {
+                        size: 14
+                    },
+                    bodyFont: {
+                        size: 13
+                    },
+                    padding: 12,
+                    cornerRadius: 8
                 }
             },
             scales: {
@@ -795,7 +993,30 @@ async function visualizeSectors() {
                     beginAtZero: false,
                     title: {
                         display: true,
-                        text: 'Time (seconds)'
+                        text: 'Time (seconds)',
+                        font: {
+                            size: 12,
+                            weight: 'bold'
+                        },
+                        padding: 10
+                    },
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    },
+                    ticks: {
+                        font: {
+                            size: 11
+                        }
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        font: {
+                            size: 11
+                        }
                     }
                 }
             }
@@ -934,33 +1155,37 @@ async function visualizeSpeedTraps() {
                 {
                     label: `${driver1Code} Max`,
                     data: driver1MaxData,
-                    backgroundColor: 'rgba(255, 99, 132, 0.8)',
-                    borderColor: 'rgb(255, 99, 132)',
-                    borderWidth: 1,
+                    backgroundColor: 'rgba(255, 45, 85, 0.8)',
+                    borderColor: 'rgb(255, 45, 85)',
+                    borderWidth: 2,
+                    borderRadius: 4,
                     barPercentage: 0.8
                 },
                 {
                     label: `${driver1Code} Avg`,
                     data: driver1AvgData,
-                    backgroundColor: 'rgba(255, 99, 132, 0.3)',
-                    borderColor: 'rgb(255, 99, 132)',
-                    borderWidth: 1,
+                    backgroundColor: 'rgba(255, 45, 85, 0.3)',
+                    borderColor: 'rgb(255, 45, 85)',
+                    borderWidth: 2,
+                    borderRadius: 4,
                     barPercentage: 0.8
                 },
                 {
                     label: `${driver2Code} Max`,
                     data: driver2MaxData,
-                    backgroundColor: 'rgba(54, 162, 235, 0.8)',
-                    borderColor: 'rgb(54, 162, 235)',
-                    borderWidth: 1,
+                    backgroundColor: 'rgba(0, 122, 255, 0.8)',
+                    borderColor: 'rgb(0, 122, 255)',
+                    borderWidth: 2,
+                    borderRadius: 4,
                     barPercentage: 0.8
                 },
                 {
                     label: `${driver2Code} Avg`,
                     data: driver2AvgData,
-                    backgroundColor: 'rgba(54, 162, 235, 0.3)',
-                    borderColor: 'rgb(54, 162, 235)',
-                    borderWidth: 1,
+                    backgroundColor: 'rgba(0, 122, 255, 0.3)',
+                    borderColor: 'rgb(0, 122, 255)',
+                    borderWidth: 2,
+                    borderRadius: 4,
                     barPercentage: 0.8
                 }
             ]
@@ -970,7 +1195,33 @@ async function visualizeSpeedTraps() {
             plugins: {
                 title: {
                     display: true,
-                    text: 'Speed Traps Comparison'
+                    text: 'Speed Traps Comparison',
+                    font: {
+                        size: 16,
+                        weight: 'bold'
+                    },
+                    padding: 20
+                },
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        usePointStyle: true,
+                        padding: 20,
+                        font: {
+                            size: 12
+                        }
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    titleFont: {
+                        size: 14
+                    },
+                    bodyFont: {
+                        size: 13
+                    },
+                    padding: 12,
+                    cornerRadius: 8
                 }
             },
             scales: {
@@ -978,7 +1229,30 @@ async function visualizeSpeedTraps() {
                     beginAtZero: false,
                     title: {
                         display: true,
-                        text: 'Speed (km/h)'
+                        text: 'Speed (km/h)',
+                        font: {
+                            size: 12,
+                            weight: 'bold'
+                        },
+                        padding: 10
+                    },
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    },
+                    ticks: {
+                        font: {
+                            size: 11
+                        }
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        font: {
+                            size: 11
+                        }
                     }
                 }
             }
@@ -1097,16 +1371,18 @@ async function visualizeMinisectors() {
                     label: driver1Code,
                     data: driver1Data,
                     backgroundColor: driver1Segments.map(segment => segmentColors[segment] || 'rgba(0,0,0,0)'),
-                    borderColor: 'rgb(255, 99, 132)',
-                    borderWidth: 1,
+                    borderColor: driver1Segments.map(segment => segment ? 'rgba(0, 0, 0, 0.1)' : 'rgba(0,0,0,0)'),
+                    borderWidth: 2,
+                    borderRadius: 4,
                     barPercentage: 0.8
                 },
                 {
                     label: driver2Code,
                     data: driver2Data,
                     backgroundColor: driver2Segments.map(segment => segmentColors[segment] || 'rgba(0,0,0,0)'),
-                    borderColor: 'rgb(54, 162, 235)',
-                    borderWidth: 1,
+                    borderColor: driver2Segments.map(segment => segment ? 'rgba(0, 0, 0, 0.1)' : 'rgba(0,0,0,0)'),
+                    borderWidth: 2,
+                    borderRadius: 4,
                     barPercentage: 0.8
                 }
             ]
@@ -1116,38 +1392,72 @@ async function visualizeMinisectors() {
             plugins: {
                 title: {
                     display: true,
-                    text: 'Mini-Sectors Comparison'
+                    text: 'Mini-Sectors Comparison',
+                    font: {
+                        size: 16,
+                        weight: 'bold'
+                    },
+                    padding: 20
                 },
                 legend: {
-                    display: true,
+                    position: 'bottom',
                     labels: {
+                        usePointStyle: true,
+                        padding: 20,
+                        font: {
+                            size: 12
+                        },
                         generateLabels: function(chart) {
                             const defaultLabels = Chart.defaults.plugins.legend.labels.generateLabels(chart);
                             const customLabels = [
                                 {
                                     text: 'Purple (Fastest)',
                                     fillStyle: segmentColors[2051],
-                                    strokeStyle: segmentColors[2051]
+                                    strokeStyle: 'rgba(0, 0, 0, 0.1)'
                                 },
                                 {
                                     text: 'Green (Personal Best)',
                                     fillStyle: segmentColors[2049],
-                                    strokeStyle: segmentColors[2049]
+                                    strokeStyle: 'rgba(0, 0, 0, 0.1)'
                                 },
                                 {
                                     text: 'Yellow (Standard)',
                                     fillStyle: segmentColors[2048],
-                                    strokeStyle: segmentColors[2048]
+                                    strokeStyle: 'rgba(0, 0, 0, 0.1)'
                                 }
                             ];
                             return [...defaultLabels, ...customLabels];
                         }
                     }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    titleFont: {
+                        size: 14
+                    },
+                    bodyFont: {
+                        size: 13
+                    },
+                    padding: 12,
+                    cornerRadius: 8
                 }
             },
             scales: {
                 y: {
                     display: false
+                },
+                x: {
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        font: {
+                            size: 11
+                        },
+                        maxRotation: 0,
+                        autoSkip: true,
+                        maxTicksLimit: 20
+                    }
                 }
             }
         }

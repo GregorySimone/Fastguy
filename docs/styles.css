@@ -1,36 +1,233 @@
+/* Modern Card Styling */
 .card {
-    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: none;
+    border-radius: 12px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .card-header {
-    background-color: #f8f9fa;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+    background-color: #ffffff;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 12px 12px 0 0 !important;
+    padding: 1.25rem;
 }
 
-#chartContainer {
-    min-height: 400px;
-    position: relative;
+.card-body {
+    padding: 1.5rem;
+}
+
+/* Form Controls */
+.form-select, .form-control {
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    padding: 0.75rem;
+    transition: all 0.2s ease;
+}
+
+.form-select:focus, .form-control:focus {
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 0.2rem rgba(74, 144, 226, 0.25);
 }
 
 .form-select:disabled {
-    background-color: #e9ecef;
+    background-color: #f8f9fa;
     cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* Button Styling */
+.btn {
+    border-radius: 8px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.btn-primary {
+    background-color: #4a90e2;
+    border-color: #4a90e2;
+}
+
+.btn-primary:hover {
+    background-color: #357abd;
+    border-color: #357abd;
+    transform: translateY(-1px);
 }
 
 .btn-group .btn {
-    padding: 0.25rem 0.5rem;
+    padding: 0.5rem 1rem;
     font-size: 0.875rem;
+    border-radius: 6px;
+}
+
+/* Chart Container */
+#chartContainer {
+    min-height: 400px;
+    position: relative;
+    padding: 1rem;
+    background-color: #ffffff;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+/* Table Styling */
+.table {
+    margin-bottom: 0;
 }
 
 .table th {
     font-weight: 600;
     background-color: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+    padding: 1rem;
+    color: #495057;
 }
 
+.table td {
+    padding: 1rem;
+    vertical-align: middle;
+}
+
+.table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* Delta Values */
 .delta-positive {
     color: #dc3545;
+    font-weight: 500;
 }
 
 .delta-negative {
     color: #198754;
+    font-weight: 500;
+}
+
+/* Performance Indicators */
+.performance-indicator {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+    border-radius: 4px;
+    vertical-align: middle;
+}
+
+/* Tyre Compound Colors with Modern Look */
+.tyre-compound {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+    display: inline-block;
+    margin: 2px;
+}
+
+.tyre-soft {
+    background-color: rgba(255, 0, 0, 0.1);
+    color: #dc3545;
+}
+
+.tyre-medium {
+    background-color: rgba(255, 255, 0, 0.1);
+    color: #ffc107;
+}
+
+.tyre-hard {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #6c757d;
+}
+
+.tyre-intermediate {
+    background-color: rgba(0, 255, 0, 0.1);
+    color: #198754;
+}
+
+.tyre-wet {
+    background-color: rgba(0, 0, 255, 0.1);
+    color: #0d6efd;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.table-responsive {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .card {
+        margin-bottom: 1.5rem;
+    }
+    
+    .btn-group {
+        width: 100%;
+    }
+    
+    .btn-group .btn {
+        flex: 1;
+    }
+}
+
+/* Loading State */
+.loading {
+    position: relative;
+    opacity: 0.7;
+}
+
+.loading::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 2rem;
+    height: 2rem;
+    margin: -1rem 0 0 -1rem;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #4a90e2;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Chart Legend */
+.chart-legend {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    font-size: 0.875rem;
+}
+
+.legend-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    margin-right: 8px;
 }
