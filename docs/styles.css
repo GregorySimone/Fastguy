@@ -1,0 +1,36 @@
+.card {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+#chartContainer {
+    min-height: 400px;
+    position: relative;
+}
+
+.form-select:disabled {
+    background-color: #e9ecef;
+    cursor: not-allowed;
+}
+
+.btn-group .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+}
+
+.table th {
+    font-weight: 600;
+    background-color: #f8f9fa;
+}
+
+.delta-positive {
+    color: #dc3545;
+}
+
+.delta-negative {
+    color: #198754;
+}
