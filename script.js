@@ -1,5 +1,37 @@
+// Import visualization functions
+import { visualizeFastestLap } from './js/visualization/fastestLap.js';
+import { visualizeTyreStrategy } from './js/visualization/tyreStrategy.js';
+
 // Initialize chart instance
 let currentChart = null;
+
+// Helper function to format time in MM:SS.sss format
+function formatTime(seconds) {
+    if (!seconds) return 'N/A';
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = (seconds % 60).toFixed(3);
+    return `${minutes}:${remainingSeconds.padStart(6, '0')}`;
+}
+
+// Toggle between chart and table views
+function toggleView(view) {
+    const chartContainer = document.getElementById('chartContainer');
+    const tableContainer = document.getElementById('tableContainer');
+    const chartBtn = document.getElementById('chartView');
+    const tableBtn = document.getElementById('tableView');
+
+    if (view === 'chart') {
+        chartContainer.classList.remove('d-none');
+        tableContainer.classList.add('d-none');
+        chartBtn.classList.add('active');
+        tableBtn.classList.remove('active');
+    } else {
+        chartContainer.classList.add('d-none');
+        tableContainer.classList.remove('d-none');
+        chartBtn.classList.remove('active');
+        tableBtn.classList.add('active');
+    }
+}
 
 // Initialize dropdowns and event listeners
 document.addEventListener('DOMContentLoaded', async () => {
@@ -182,49 +214,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             case 'fastestLap':
                 await visualizeFastestLap();
                 break;
-            case 'lapTimes':
-                await visualizeLapTimes();
-                break;
-            case 'sectors':
-                await visualizeSectors();
-                break;
-            case 'minisectors':
-                await visualizeMinisectors();
-                break;
-            case 'speedTraps':
-                await visualizeSpeedTraps();
-                break;
             case 'tyreStrategy':
                 await visualizeTyreStrategy();
                 break;
         }
     });
 });
-
-// Helper function to format time in MM:SS.sss format
-function formatTime(seconds) {
-    if (!seconds) return 'N/A';
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = (seconds % 60).toFixed(3);
-    return `${minutes}:${remainingSeconds.padStart(6, '0')}`;
-}
-
-// Toggle between chart and table views
-function toggleView(view) {
-    const chartContainer = document.getElementById('chartContainer');
-    const tableContainer = document.getElementById('tableContainer');
-    const chartBtn = document.getElementById('chartView');
-    const tableBtn = document.getElementById('tableView');
-
-    if (view === 'chart') {
-        chartContainer.classList.remove('d-none');
-        tableContainer.classList.add('d-none');
-        chartBtn.classList.add('active');
-        tableBtn.classList.remove('active');
-    } else {
-        chartContainer.classList.add('d-none');
-        tableContainer.classList.remove('d-none');
-        chartBtn.classList.remove('active');
-        tableBtn.classList.add('active');
-    }
-}
