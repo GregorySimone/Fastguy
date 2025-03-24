@@ -1,0 +1,40 @@
+{
+  "name": "f1-data-analysis",
+  "version": "1.0.0",
+  "description": "A web-based tool for analyzing Formula 1 race data using the OpenF1 API",
+  "main": "proxy.js",
+  "scripts": {
+    "start": "node proxy.js",
+    "dev": "nodemon proxy.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "formula1",
+    "f1",
+    "racing",
+    "data-analysis",
+    "visualization",
+    "openf1"
+  ],
+  "author": "Fastguy",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "node-fetch": "^2.7.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/username/f1-data-analysis.git"
+  },
+  "bugs": {
+    "url": "https://github.com/username/f1-data-analysis/issues"
+  },
+  "homepage": "https://github.com/username/f1-data-analysis#readme"
+}
